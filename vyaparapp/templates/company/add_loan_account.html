@@ -123,10 +123,8 @@
       <form id="myForm" action="{% url 'create_loan_account' %}" method="post">
         {% csrf_token %}
         <div class="position-relative">
-            <div class="position-absolute end-0">
-                <div class="d-flex pt-3 pe-3">
                     <span class="fa fa-cog fs-5 tb p-1 pe-3"></span>
-                    <a href="#"><span class="fa fa-times fs-5 tb close_pad"></span></a>
+                    <a href="{% url 'loan_list' %}"><span class="fa fa-times fs-5 tb close_pad"></span></a>
                 </div>
             </div>
         </div>
@@ -149,7 +147,7 @@
                     </div>
                     <div class="w-100">
                         <label for="">Account Number</label>
-                        <input style="color: black;" class="form-control border-dark fw-bolder" type="number" value="{{ account_num1 }}" placeholder="0000-0000-0000-0000" name="account_num" required hx-post="{% url 'account_num_check' %}" hx-trigger="keyup delay:0s" hx-target="#account_num_check_target"
+                        <input style="color: black;" class="form-control border-dark fw-bolder" type="number" value="{{ acc_no }}" placeholder="0000-0000-0000-0000" name="account_num" required hx-post="{% url 'account_num_check' %}" hx-trigger="keyup delay:0s" hx-target="#account_num_check_target"
                         hx-post="{% url 'account_num_check' %}"
                           hx-trigger="keyup delay:0s"
                           hx-target="#account_num_check_target">
@@ -175,30 +173,57 @@
                     </div>
                 </div>
                 <div class="d-lg-flex d-md-flex d-xl-flex d-xxl-flex d-sm-none">
-                    <div class="w-100">
-                        <label for="">Loan Received</label>
-                        
-                        <select style="color: black;"   class="form-control border-dark fw-bolder" id="" name="loan_received" required>
-                            <option value="cash"><span class="fa fa-credit-card-alt tb fs-4"></span>Cash</option>
-                            <option value="check"><span class="fa fa-credit-card-alt tb fs-4"></span>Check</option>
-                            <option value="upi"><span class="fa fa-credit-card-alt tb fs-4"></span>UPI</option>
-                            
-                          </select>
-                        <hr>
-                    </div>
+                  <div class="w-100">
+                    <label for="">Loan Received</label>
+                    <select style="color: black;" class="form-control border-dark fw-bolder" id="loan_received" name="loan_received" required>
+                        <option value="cash"><span class="fa fa-credit-card-alt tb fs-4"></span>Cash</option>
+                        <option value="check"><span class="fa fa-credit-card-alt tb fs-4"></span>Check</option>
+                        <option value="upi"><span class="fa fa-credit-card-alt tb fs-4"></span>UPI</option>
+                        {% for bank in banks %}
+                            <option value="{{ bank.bank_name }}"><span class="fa fa-credit-card-alt tb fs-4"></span>{{ bank.bank_name }}</option>
+                        {% endfor %}
+                    </select>
+                    <hr>
+                </div>
+                
+                <div id="cheque_number_field" style="display: none;"class="w-100">
+                    <label for="">Cheque Number</label>
+                    <input style="color: black;" class="form-control border-dark fw-bolder" type="text" name="cheque_number" placeholder="Enter Cheque Number">
+                    <hr>
+                </div>
+                
+                <div id="upi_field" style="display: none;"class="w-100">
+                    <label for="">UPI Number</label>
+                    <input style="color: black;" class="form-control border-dark fw-bolder" type="text" name="upi_number" placeholder="Enter UPI Number">
+                    <hr>
+                </div>
+                
+                <div id="bank_acc_field" style="display: none;"class="w-100">
+                    <label for="">Bank Account Number</label>
+                    <input style="color: black;" class="form-control border-dark fw-bolder" type="text" name="bank_acc_number" placeholder="Enter Bank Account Number">
+                    <hr>
+                </div>
                     <div class="w-100">
                         <label for="">Interst Rate</label>
                         <input style="color: black;" autofocus="true" class="form-control border-dark fw-bolder" value="{{ intrestrate }}" type="number" placeholder="Intrest Rate % per annum" autocomplete="off" name="intrest_rate" required>
                         <hr>
                     </div>
-                    <div class="w-100">
-                        <label for="">Term Duration</label>
-                        <input style="color: black;" autofocus="true" class="form-control border-dark fw-bolder" value="{{ duration }}" type="number" placeholder="Duration (In Months)" autocomplete="off" name="term_duration" required>
-                        <hr>
-                            <hr>
-                    </div>
+                    
                 </div>
                 <div class="d-lg-flex d-md-flex d-xl-flex d-xxl-flex d-sm-none">
+                  <div class="w-100">
+                    <label for="">Term Duration</label>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="{% url 'add_duration' %}" id="addDurationLink" class="add-duration-link">Add New Duration</a>
+                    <div class="custom-dropdown">
+                        <select style="color: black;" class="form-control border-dark fw-bolder" name="term_duration" required id="termDurationDropdown">
+                            <option value="">Select Term Duration</option>
+                            {% for duration in durations %}
+                                <option value="{{ duration.duration_value }}">{{ duration.duration_value }}</option>
+                            {% endfor %}
+                        </select>
+                       
+                    </div>
+                </div>
                     <div class="w-100">
                         <label for="">Processing Fee</label>
                         <input style="color: black;" autofocus="true" class="form-control border-dark fw-bolder" value="{{ processingfee }}" type="number" placeholder="Processing Fee" autocomplete="off" name="processing_fee" required>
@@ -211,7 +236,9 @@
                             <option value="cash"><span class="fa fa-credit-card-alt tb fs-4"></span>Cash</option>
                             <option value="check"><span class="fa fa-credit-card-alt tb fs-4"></span>Check</option>
                             <option value="upi"><span class="fa fa-credit-card-alt tb fs-4"></span>UPI</option>
-                            
+                            {% for bank in banks %}
+                            <option value="{{ bank.bank_name }}"><span class="fa fa-credit-card-alt tb fs-4"></span>{{ bank.bank_name }}</option>
+                           {% endfor %}
                           </select>
                         <hr>
                     </div>
@@ -269,6 +296,31 @@
   </div>
 </div>
 
+<script>
+  // Function to show/hide input fields based on the selected option
+  document.getElementById('loan_received').addEventListener('change', function() {
+      var selectedOption = this.value;
+
+      // Show/hide input fields based on selection
+      if (selectedOption === 'check') {
+          document.getElementById('cheque_number_field').style.display = 'block';
+          document.getElementById('upi_field').style.display = 'none';
+          document.getElementById('bank_acc_field').style.display = 'none';
+      } else if (selectedOption === 'upi') {
+          document.getElementById('upi_field').style.display = 'block';
+          document.getElementById('cheque_number_field').style.display = 'none';
+          document.getElementById('bank_acc_field').style.display = 'none';
+      } else if (selectedOption === 'cash') {
+          document.getElementById('cheque_number_field').style.display = 'none';
+          document.getElementById('upi_field').style.display = 'none';
+          document.getElementById('bank_acc_field').style.display = 'none';
+      } else {
+          document.getElementById('cheque_number_field').style.display = 'none';
+          document.getElementById('upi_field').style.display = 'none';
+          document.getElementById('bank_acc_field').style.display = 'block';
+      }
+  });
+</script>
 <script>
   $(document).on("submit","#unit_form",function(e){
     e.preventDefault();

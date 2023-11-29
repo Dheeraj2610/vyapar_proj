@@ -448,8 +448,17 @@ class LoanModel(models.Model):
     as_of_date = models.DateField(null=True)
     loan_received = models.CharField(max_length=255,null=True)
     intrest = models.BigIntegerField(null=True)
-    duration = models.IntegerField(null=True)
+    duration = models.CharField(max_length=255,null=True)
     processing_fee = models.IntegerField(null=True)
     processing_from = models.CharField(max_length=255,null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     created_by = models.CharField(max_length=255,null=True)
+    total_balance = models.BigIntegerField(null=True)
+    bank=models.ForeignKey(BankModel,on_delete=models.CASCADE,blank=True,null=True)
+    cheque_number = models.CharField(max_length=255, null=True, blank=True)
+    upi_number = models.CharField(max_length=255, null=True, blank=True)
+    bank_acc_number = models.CharField(max_length=255, null=True, blank=True)
+
+
+class Duration(models.Model):
+    duration_value = models.CharField(max_length=100,null=True)

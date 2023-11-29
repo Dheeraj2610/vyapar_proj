@@ -5848,7 +5848,7 @@ def bankdata1(request):
 
 
 def loan_create(request):
-  print('asdasd')
+
   try:
     staff_id = request.session['staff_id']
     print(staff_id)
@@ -5861,18 +5861,21 @@ def loan_create(request):
   except:
     user = User.objects.get(id=request.user.id)
     get_company_id_using_user_id = company.objects.get(user=user)
+    banks = BankModel.objects.all()
+    duration=Duration.objects.all()
     # permission
     allmodules= modules_list.objects.get(company=get_company_id_using_user_id,status='New')
     # permission
-    return render(request,'company/add_loan_account.html',{"allmodules":allmodules,
-                                                      'bank_name1':'',
-                                                      'account_num1':'',
-                                                      'ifsc_code1':'',
-                                                      'branch_name1':'',
-                                                      'as_of_date1':'',
-                                                      'card_type1':'',
-                                                      'ope_bal1':''})
+    return render(request,'company/add_loan_account.html',{"allmodules":allmodules,"banks": banks,"durations":duration})
   
+
+from datetime import datetime  
+from .models import LoanModel, staff_details, company
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import LoanModel  # Import your LoanModel if not imported already
+
+from .models import LoanModel
 
 def create_loan_account(request):
     if request.method == "POST":
@@ -5883,11 +5886,18 @@ def create_loan_account(request):
         balance = request.POST.get('curnt_balance')
         as_of_date = request.POST.get('as_of_date')
         loan_received = request.POST.get('loan_received')
-        interest = request.POST.get('intrest_rate')
+        intrest = request.POST.get('intrest_rate')
         duration = request.POST.get('term_duration')
         processing_fee = request.POST.get('processing_fee')
         processing_from = request.POST.get('processing_fee_paid_from')
         created_by = request.user.first_name  # Assuming the user is logged in
+
+        total_balance = int(balance) + int(processing_fee) if balance and processing_fee else None
+
+        # Get the values of cheque number, UPI number, or bank account number
+        cheque_number = request.POST.get('cheque_number')
+        upi_number = request.POST.get('upi_number')
+        bank_acc_number = request.POST.get('bank_acc_number')
 
         # Create a new loan account
         new_loan_account = LoanModel(
@@ -5898,11 +5908,15 @@ def create_loan_account(request):
             balance=balance,
             as_of_date=as_of_date,
             loan_received=loan_received,
-            interest=interest,
+            intrest=intrest,
             duration=duration,
             processing_fee=processing_fee,
             processing_from=processing_from,
-            created_by=created_by
+            created_by=created_by,
+            total_balance=total_balance,
+            cheque_number=cheque_number,
+            upi_number=upi_number,
+            bank_acc_number=bank_acc_number
         )
         new_loan_account.save()
 
@@ -5912,3 +5926,46 @@ def create_loan_account(request):
     # Render the form for creating a new loan account
     return render(request, 'add_loan_account.html')  # Update with your template name
 
+
+from .models import Duration
+
+def add_duration(request):
+    if request.method == 'POST':
+        duration_value = request.POST.get('duration_value')
+        if duration_value:
+            Duration.objects.create(duration_value=duration_value)
+            return redirect('add_duration')
+        else:
+            return HttpResponse('Invalid duration value')  # Handle validation or errors here
+    return render(request, 'company/add_duration.html')
+
+# def loan_list(request,pk):
+#   try:
+#     get_company_id_using_user_id = company.objects.get(user=request.user.id)
+#     all_loan = LoanModel.objects.filter(company=get_company_id_using_user_id.id)
+#     if pk == 0:
+#       first_loan = all_loan.filter().first()
+#     else:
+#       first_loan = all_loan.get(id=pk)
+    
+#     if all_loan == None or all_loan == '' or first_loan == None :
+#       return render(request,'company/add_loan_first.html')
+#     return render(request,'company/loan_list.html',{'all_loan':all_loan,
+#                                                       'first_loan':first_loan,})
+#   except:
+#     return render(request,'company/add_loan_first.html')
+def loan_list(request):
+    try:
+        # Check if there is any data in LoanModel
+        if LoanModel.objects.exists():
+            # If data is present, redirect to loan_list.html
+            all_loan = LoanModel.objects.all()
+            
+            return render(request, 'company/loan_list.html', {'all_loan': all_loan})
+        else:
+            # If no data, redirect to add_loan_first.html
+            return render(request, 'company/add_loan_first.html')
+    except Exception as e:
+        # Handle exceptions or errors if any
+        print(str(e))  # Log the error message for debugging
+        return render(request, 'company/add_loan_first.html')

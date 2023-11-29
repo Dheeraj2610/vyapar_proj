@@ -1,0 +1,8 @@
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="id_duration_value">Duration:</label>
+        <input id="id_duration_value" type="text" class="form-control" name="duration_value" placeholder="Enter Duration" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Duration</button>
+</form>
