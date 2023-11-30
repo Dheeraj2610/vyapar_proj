@@ -1,4 +1,4 @@
-{% extends 'company/src/html/base.html' %}
+{% extends 'staff/staffbase.html' %}
 
 {% block content %}
 {% load static %}
@@ -175,7 +175,7 @@
                 <hr class="p-0 m-0">
                 <div style="background-color: rgba(0, 195, 255, 0.205);" class="p-3 pb-0 mb-0">
                     <div class="row pb-0 mb-0">
-                        <div class="col text-center pb-2" style="border-bottom: 3px solid rgba(0, 0, 0, 0.548);"><a class=" fs-4 text-dark" style="font-weight: 900;" href="">LOANS</a></div>
+                        <div class="col text-center pb-2" style="border-bottom: 3px solid rgba(0, 0, 0, 0.548);"><a class=" fs-4 text-dark" style="font-weight: 900;" href="#">LOANS</a></div>
                         <!-- <div class="col text-center pb-2" style="border-bottom: 3px solid transparent;"><a class="fw-bolder fs-4" style="color: gray;" href="">FIELD1</a></div>
                         <div class="col text-center pb-2" style="border-bottom: 3px solid transparent;"><a class="fw-bolder fs-4" style="color: gray;" href="">FIELD2</a></div>
                         <div class="col text-center pb-2" style="border-bottom: 3px solid transparent;"><a class="fw-bolder fs-4" style="color: gray;" href="">FIELD3</a></div> -->
@@ -234,7 +234,7 @@
                         <hr class="p-0 m-0">
                     </div>
                     <div class="col-12 p-2 pt-0">
-                        {% if all_loan %}
+                        {% if all_loans %}
                         <div id="item_search_filter_target">
                             <form action="" method="post">
                                 {% csrf_token %}
@@ -246,9 +246,9 @@
                                         <th class="text-end fs-2 tb">AMOUNT</th>
                                     </thead>
                                     <tbody>
-                                        {% for i in all_loan %}
+                                        {% for i in all_loans %}
                                         <tr class="item_lists_hide">
-                                            <td style="cursor:pointer" class="text-start fs-2 fw-bold text-dark"><a style="color: black;font-weight: 500;" href="{% url 'loan_list'  %}">{{ i.account_name|upper }}</a></td>
+                                            <td style="cursor:pointer" class="text-start fs-2 fw-bold text-dark"><a style="color: black;font-weight: 500;" href="{% url 'loan_list' i.id %}">{{ i.account_name|upper }}</a></td>
                                             <td class="text-end pe-0 me-0 fs-2 fw-bolder" style="color: green;">
                                                 <span class="amount_truncate">{{ i.balance }}</span>
                                                 <div class="btn-group mb-1">
@@ -319,11 +319,11 @@
                     </div>
                     <p></p>
                     <div class="d-flex justify-content-between">
-                        <p class="tb fw-bolder fs-2">ACCOUNT NUMBER  <span class="ps-2 tg">{{ all_loan.account_num }}</span></p>
+                        <p class="tb fw-bolder fs-2">ACCOUNT NUMBER  <span class="ps-2 tg">{{ loan.account_num }}</span></p>
                         <!-- <p class="tb fw-bolder fs-2">STOCK QUANTITY  <span class="ps-2 tg"></span></p> -->
                     </div>
                     <div class="d-flex justify-content-between">
-                        <p class="tb fw-bolder fs-2">IFSC CODE  <span class="ps-2 tg">{{ bank.ifsc|upper }}</span></p>
+                        <p class="tb fw-bolder fs-2">loan id  <span class="ps-2 tg">{{ bank.ifsc|upper }}</span></p>
                         
                     </div>
                     <div class="d-flex justify-content-between">

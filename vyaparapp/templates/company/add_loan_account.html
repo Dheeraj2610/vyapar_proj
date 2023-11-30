@@ -1,4 +1,4 @@
-{% extends 'company/src/html/base.html' %}
+{% extends 'staff/staffbase.html' %}
 
 {% block content %}
 {% load static %}
@@ -124,7 +124,7 @@
         {% csrf_token %}
         <div class="position-relative">
                     <span class="fa fa-cog fs-5 tb p-1 pe-3"></span>
-                    <a href="{% url 'loan_list' %}"><span class="fa fa-times fs-5 tb close_pad"></span></a>
+                    <a href="{% url 'loan_list' 0 %}"><span class="fa fa-times fs-5 tb close_pad"></span></a>
                 </div>
             </div>
         </div>

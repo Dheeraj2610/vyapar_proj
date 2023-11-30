@@ -251,7 +251,7 @@ urlpatterns = [
     path('loan_create',views.loan_create,name='loan_create'),
     path('create_loan_account',views.create_loan_account,name='create_loan_account'),
     path('add-duration/', views.add_duration, name='add_duration'),
-    path('loan_list', views.loan_list, name='loan_list'),
+    path('loan_list/<int:pk>', views.loan_list, name='loan_list'),
 
 
 

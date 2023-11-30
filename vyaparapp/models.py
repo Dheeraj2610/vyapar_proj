@@ -458,7 +458,18 @@ class LoanModel(models.Model):
     cheque_number = models.CharField(max_length=255, null=True, blank=True)
     upi_number = models.CharField(max_length=255, null=True, blank=True)
     bank_acc_number = models.CharField(max_length=255, null=True, blank=True)
+    staff = models.ForeignKey(staff_details,on_delete=models.CASCADE,null=True,blank=True)
 
 
 class Duration(models.Model):
     duration_value = models.CharField(max_length=100,null=True)
+
+class LoanTransactionHistory(models.Model):
+    staff = models.ForeignKey(staff_details,on_delete=models.CASCADE,blank=True,null=True)
+    company = models.ForeignKey(company,on_delete=models.CASCADE,blank=True,null=True)
+    bank = models.ForeignKey(BankModel,on_delete=models.CASCADE,blank=True,null=True)
+    loan= models.ForeignKey(LoanModel,on_delete=models.CASCADE,blank=True,null=True)
+    date = models.DateField(auto_now_add=True,null=True)
+    action = models.CharField(max_length=255)
+    done_by = models.CharField(max_length=255)
+    done_by_name = models.CharField(max_length=255)
