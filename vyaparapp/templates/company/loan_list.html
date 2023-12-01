@@ -284,7 +284,7 @@
             <div class="row m-0" style="height:20%">
                 <div class="card bg-light bs p-3 mb-3">
                     <div class="d-flex justify-content-between">
-                        <p class="tb fw-bolder fs-2">{{ all_loan.account_name|upper }} <span class="fa fa-share ps-1 tb"></span></p>
+                        <p class="tb fw-bolder fs-2">{{ loan.account_name|upper }} <span class="fa fa-share ps-1 tb"></span></p>
                         <div class="btn-group mb-1">
                             <button class="btn btn-sm btn-primary fs-2" style="border-radius: 5px;" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="fa fa-sliders-h pe-1"></span> 
@@ -296,13 +296,13 @@
                             hx-trigger="click delay:0s"
                             hx-target="#bank_modal_get_details"
                             >
-                                <a class="dropdown-item fw-bold tb color_change" href="" data-bs-target="#myModal1" data-bs-toggle="modal"> BANK TO BANK</a></li>
+                                <a class="dropdown-item fw-bold tb color_change" href="" data-bs-target="#myModal1" data-bs-toggle="modal"> ADDITIONAL LOAN</a></li>
                             <li
                             hx-get="{% url 'get_bank_to_cash' %}"
                             hx-trigger="click delay:0s"
                             hx-target="#bank_modal_get_details"
                             >
-                            <a class="dropdown-item fw-bold tb color_change" href="" data-bs-target="#myModal1" data-bs-toggle="modal"> BANK TO CASH</a></li>
+                            <a class="dropdown-item fw-bold tb color_change" href="" data-bs-target="#myModal1" data-bs-toggle="modal"> MAKE PAYMENT</a></li>
                             <li
                             hx-get="{% url 'get_cash_to_bank' %}"
                             hx-trigger="click delay:0s"
@@ -323,12 +323,12 @@
                         <!-- <p class="tb fw-bolder fs-2">STOCK QUANTITY  <span class="ps-2 tg"></span></p> -->
                     </div>
                     <div class="d-flex justify-content-between">
-                        <p class="tb fw-bolder fs-2">loan id  <span class="ps-2 tg">{{ bank.ifsc|upper }}</span></p>
+                        <p class="tb fw-bolder fs-2">LENDER BANK <span class="ps-2 tg">{{ loan.lender_bank|upper }}</span></p>
                         
                     </div>
                     <div class="d-flex justify-content-between">
-                        <p class="tb fw-bolder fs-2">OPENING BALANCE  <span class="ps-2 tg">₹ {{ bank.open_balance }}</span></p>
-                        <p class="tb fw-bolder fs-2">BALANCE  <span class="ps-2 tg">₹ {{ bank.current_balance }}</span></p>
+                        <p class="tb fw-bolder fs-2">OPENING BALANCE  <span class="ps-2 tg">₹ {{ loan.balance }}</span></p>
+                        <!-- <p class="tb fw-bolder fs-2">BALANCE  <span class="ps-2 tg">₹ {{ bank.current_balance }}</span></p> -->
                     </div>
                 </div>
             </div>
@@ -386,7 +386,7 @@
                                         <th class="text-center fs-2 show_bank_id hide_field" hidden>FROM <span class="fa fa-filter ps-1 fs-1"></span></th>
                                         <th class="text-center fs-2 show_bank_id hide_field" hidden>TO <span class="fa fa-filter ps-1 fs-1"></span></th>
                                         <th class="text-center fs-2">
-                                            NAME 
+                                            DATE 
                                             <div class="custom-dropdown">
                                                 <span class="fa fa-filter ps-1 fs-1" onclick="toggleDropdown2()"></span>
                                                 <div style="display: none;" class="dropdown-content dd2">
@@ -401,7 +401,7 @@
                                               </div>
                                         </th>
                                         <th class="text-center fs-2">
-                                            DATE 
+                                            PRINCIPLE AMOUNT
                                             <div class="custom-dropdown">
                                                 <span class="fa fa-filter ps-1 fs-1" onclick="toggleDropdown3()"></span>
                                                 <div style="display: none;" class="dropdown-content dd3">
@@ -415,23 +415,8 @@
                                                 </div>
                                               </div>
                                         </th>
-                                        <th class="text-center fs-2">
-                                            AMOUNT 
-                                            <div class="custom-dropdown">
-                                                <span class="fa fa-filter ps-1 fs-1" onclick="toggleDropdown4()"></span>
-                                                <div style="display: none;" class="dropdown-content dd4">
-                                                  <span onclick="toggleDropdown4()" class="fa fa-times cls"></span>
-                                                  <h6 class="title mb-0 mb-2 exact_match_0">EXACT MATCH</h6>
-                                                  <input id="dd4_input" type="text" placeholder="Enter something...">
-                                                  <div class="d-flex">
-                                                    <button class="me-2 clear_0" onclick="clear_input4()">CLEAR</button>
-                                                    <button class="sbmit_0" onclick="handleButtonClick4()">SUBMIT</button>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                        </th>
                                         <th class="text-center fs-2 hide_field">
-                                            ACTION 
+                                            INTEREST 
                                             <div class="custom-dropdown">
                                                 <span class="fa fa-filter ps-1 fs-1" onclick="toggleDropdown6()"></span>
                                                 <div style="display: none;" class="dropdown-content dd6">
@@ -445,6 +430,22 @@
                                                 </div>
                                               </div>
                                         </th>
+                                        <th class="text-center fs-2">
+                                            TOTAL AMOUNT 
+                                            <div class="custom-dropdown">
+                                                <span class="fa fa-filter ps-1 fs-1" onclick="toggleDropdown4()"></span>
+                                                <div style="display: none;" class="dropdown-content dd4">
+                                                  <span onclick="toggleDropdown4()" class="fa fa-times cls"></span>
+                                                  <h6 class="title mb-0 mb-2 exact_match_0">EXACT MATCH</h6>
+                                                  <input id="dd4_input" type="text" placeholder="Enter something...">
+                                                  <div class="d-flex">
+                                                    <button class="me-2 clear_0" onclick="clear_input4()">CLEAR</button>
+                                                    <button class="sbmit_0" onclick="handleButtonClick4()">SUBMIT</button>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                        </th>
+                                        
                                         <th class="text-center fs-2 hide_field">
                                             BY 
                                             <div class="custom-dropdown">
@@ -463,21 +464,22 @@
                                         <th class="text-center p-0 m-0 hide_this_for_print"></th>
                                     </thead>
                                     <tbody>
-                                        {% if bank.open_balance != 0 %}
+                                        {% for i in tr_history %}
                                         <tr class="fs-2 open_balane_remove">
                                             <td class="text-center hide_field" style="padding-top: 1.4rem;">
                                                 <div class="d-flex justify-content-center">
                                                     <div style="width: 10px;height: 10px;" class="bg-dark rounded-pill bs_sm"></div>
                                                 </div>
                                             </td>
-                                            <td class="text-center td_type">Open. Balance</td>
-                                            <td class="text-center show_bank_id hide_field" hidden>{{ bank.id }}</td>
+                                            <td class="text-center ">Open Balance</td>
+                                            <td class="text-center show_bank_id hide_field" hidden>{{ loan.id }}</td>
                                             <td class="text-center show_bank_id hide_field" hidden></td>
                                             <td class="text-center td_name">Opening Blance</td>
-                                            <td class="text-center td_date">{{ bank.as_of_date|date:"Y-m-d" }}</td>
-                                            <td class="text-center fw-bolder td_amount">{% if bank.open_balance < 0 %}-{{ bank.open_balance|mul:-1 }}{% else %}{{ bank.open_balance }}{% endif %}</td>
+                                            <td class="text-center td_date">{{ i.bank.as_of_date|date:"Y-m-d" }}</td>
+                                           
+                                            <td class="text-center fw-bolder td_amount">{% if loan.balance %}{{ loan.balance }}{% endif %}</td>
                                             <td class="text-center fw-bolder td_action hide_field">{% if open_bal_last_edited.action == 'BANK OPEN BALANCE CREATED' %}CREATED{% else %}UPDATED{% endif %}</td>
-                                            <td class="text-center fw-bolder td_by hide_field">{{ open_bal_last_edited.done_by_name|capfirst }}</td>
+                                            <!-- <td class="text-center fw-bolder td_by hide_field">{{ open_bal_last_edited.done_by_name|capfirst }}</td> -->
                                             <td class="p-0 pt-1 m-0 hide_this_for_print">
                                                 <div class="btn-group mb-1">
                                                     <button style="border: none;background: none;" type="button" class="ropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
@@ -491,37 +493,25 @@
                                                 </div>
                                             </td>
                                         </tr>
-                                        {% endif %}
-                                        <!-- {% for i in transactions %}
+                                        {% endfor %}
+                                        {% for i in tr_history %}
                                             <tr class="fs-2">
                                                 <td class="text-center hide_field" style="padding-top: 1.4rem;">
                                                     <div class="d-flex justify-content-center">
                                                         <div style="width: 10px;height: 10px;box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.205);border-radius: 50%;" {% if forloop.counter|mod:10 == 0 %}class="bg-success"{% elif forloop.counter|mod:10 == 1 %}class="bg-warning"{% elif forloop.counter|mod:10 == 2 %}class="bg-danger"{% elif forloop.counter|mod:10 == 3 %}class="bg-success"{% elif forloop.counter|mod:10 == 4 %}class="bg-info"{% elif forloop.counter|mod:10 == 5 %}class="bg-primary"{% elif forloop.counter|mod:10 == 6 %}class="bg-secondary"{% elif forloop.counter|mod:10 == 7 %}class="bg-warning"{% elif forloop.counter|mod:10 == 8 %}class="bg-danger"{% else %}class="bg-pink"{% endif %}></div>
                                                     </div>
                                                 </td>
-                                                <td class="text-center td_type">{{ i.type|lower|capfirst }}</td>
-                                                <td class="text-center show_bank_id hide_field" hidden>{{ i.from_here.id }}</td>
-                                                <td class="text-center show_bank_id hide_field" hidden>{{ i.to_here.id }}</td>
-                                                <td class="text-center td_name">
-                                                    {% if i.type == 'Cash Deposit' or i.type == 'CASH DEPOSIT' %}
-                                                        Cash Deposit
-                                                    {% elif i.type == 'Cash Withdraw' or i.type == 'CASH WITHDRAW' %}
-                                                        Cash Withdraw
-                                                    {% elif i.type == 'Adjustment Reduce'  or i.type == 'ADJUSTMENT REDUCE'  %}
-                                                        Adjustment Reduce
-                                                    {% elif i.type == 'Adjustment Increase' or i.type == 'ADJUSTMENT INCREASE' %}
-                                                    Adjustment Increase
-                                                    {% else %}
-                                                        {% if i.from_here.id == bank.id %}
-                                                            To: <span class="fw-bolder">{{ i.to_here.bank_name|upper }}</span>
-                                                        {% elif i.to_here.id == bank.id %}
-                                                            From : <span class="fw-bolder">{{ i.from_here.bank_name|upper }}</span>
-                                                        {% endif %}
-                                                    {% endif %}
-                                                </td>
+                                                <td class="text-center ">{{ i.action|lower|capfirst }}</td>
+                                                <!-- <td class="text-center show_bank_id hide_field" hidden>{{ i.from_here.id }}</td>
+                                                <td class="text-center show_bank_id hide_field" hidden>{{ i.to_here.id }}</td> -->
                                                 <td class="text-center td_date">{{ i.date|date:"Y-m-d" }}</td>
-                                                <td class="text-center fw-bolder td_amount">
-                                                    {% if i.type == 'Cash Withdraw' %}
+                                                <td class="text-center td_name">
+                                                  <span class="fw-bolder">{{ i.loan.balance }}</span>
+                                                </td>
+                                                <td class="text-center fw-bolder td_amount"><span>{{ i.loan.intrest }}</span> 
+                                                
+                                            <td class="text-center fw-bolder td_amount"><span>{{ i.loan.total_balance }}</span>
+                                                    <!-- {% if i.type == 'Cash Withdraw' %}
                                                         <p class="p_red pred">{{ i.amount|mul:-1 }}</p>
                                                     {% elif  i.type == 'Adjustment Reduce'  %}
                                                         <p class="p_red pred">{{ i.amount|mul:-1 }}</p>
@@ -533,6 +523,9 @@
                                                         <p class="p_green pgreen">{{ i.amount }}</p>
                                                     {% endif %} -->
                                                 </td>
+                                                <td class="text-center td_name">
+                                                    <span class="fw-bolder">{{ i.done_by }}</span>
+                                                  </td>
                                                 <td class="text-center fw-bolder td_action hide_field">{{ i.last_action }}</td>
                                                 <td class="text-center fw-bolder tb td_by hide_field">{{ i.by|capfirst }}</td>
                                                 <td class="p-0 pt-1 m-0 hide_this_for_print">
@@ -542,11 +535,11 @@
                                                         </button>
                                                         <ul class="dropdown-menu">
                                                           <li><button type="button" data-bs-toggle="modal" data-bs-target="#myModal2" class="dropdown-item fw-bold tb hide_table_text_v" 
-                                                            hx-get="{% url 'view_or_edit_bank_transaction' i.id bank.id %}"
+                                                            hx-get="#"
                                                             hx-trigger="click delay:0s"
                                                             hx-target="#bank_modal_view_or_edit"
                                                             ><span class="fa fa-eye pe-2 tg"></span> View / Edit</button></li>
-                                                          <!-- <li><button type="button" onclick="delete_bank_transaction({{ i.id }},{{ bank.id }})" class="dropdown-item fw-bold tb hide_table_text_d" href=""><span class="fa fa-trash tr" style="padding-inline-start: 0.1rem;padding-inline-end:0.7rem ;"></span> Delete</button></li> -->
+                                                          <!-- <li><button type="button" onclick="delete_bank_transaction({{ i.id }},{{ bank.id }})" class="dropdown-item fw-bold tb hide_table_text_d" href="#"><span class="fa fa-trash tr" style="padding-inline-start: 0.1rem;padding-inline-end:0.7rem ;"></span> Delete</button></li> -->
                                                           <li><a type="button" class="dropdown-item fw-bold tb hide_table_text_h" href="#"><span class="fa fa-history tbl" style="padding-inline-start: 0.1rem;padding-inline-end:0.7rem ;"></span> Transaction History</a></li>
                                                         </ul>
                                                     </div>

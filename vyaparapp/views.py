@@ -6010,12 +6010,12 @@ def create_loan_account(request):
                     company=staff.company,
                     bank=new_loan_account.bank,  # Use the bank associated with the loan
                     loan=new_loan_account,
-                    action="Loan Open balance created",  # Modify action as needed
+                    action="Opening Loan balance created",  # Modify action as needed
                     done_by=staff.first_name ,  # Specify who performed the action (here, System)
                     done_by_name=staff  # Specify the name of the performer (here, System)
                 )
                 transaction_history.save()
-                return HttpResponse("Loan account created successfully!")  # Update as needed
+                return redirect("Loan account created successfully!")  # Update as needed
 
         return HttpResponse("Error: Unable to create a loan account")
 
@@ -6169,22 +6169,23 @@ def loan_list(request, pk):
     staff = staff_details.objects.get(id=staff_id)
     get_company_id_using_user_id = company.objects.get(id=staff.company.id)
 
-    try:
-        all_loans = LoanModel.objects.filter(company=get_company_id_using_user_id.id)
+    all_loans = LoanModel.objects.filter(company=get_company_id_using_user_id.id)
 
-        if pk == '0':  # Check if pk is a string '0' instead of integer 0
+    if pk == 0:  # Check if pk is a string '0' instead of integer 0
             if not all_loans.exists():
+                print('hello3')
                 return render(request, 'company/add_loan_first.html', {'staff': staff})
             
             first_loan = all_loans.first()
             return redirect('loan_list', pk=first_loan.id)
 
-        else:
+    else:
             loan = all_loans.get(id=pk)
             transactions_all = LoanTransactionHistory.objects.filter(company=get_company_id_using_user_id.id)
             transactions = transactions_all.filter(loan_id=pk)
-            tr_history = LoanTransactionHistory.objects.filter().order_by('date')
+            tr_history = LoanTransactionHistory.objects.filter(loan=pk, action='Loan Created').order_by('date')
 
+            print('hello2')
             # open_bal_last_edited = LoanTransactionHistory.objects.filter(
             #     Q(action__contains='BANK OPEN BALANCE CREATED') | Q(action__contains='BANK OPEN BALANCE UPDATED')
             # ).last()
@@ -6197,10 +6198,6 @@ def loan_list(request, pk):
              
                 "staff": staff
             })
-
-    except Exception as e:
-        print(e)
-        return render(request, 'company/loan_list.html', {'staff': staff})
 
 from django.http import Http404
 
